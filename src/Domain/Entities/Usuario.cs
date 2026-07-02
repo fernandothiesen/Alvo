@@ -30,14 +30,14 @@ namespace Entities
 
         public Usuario(string nome, string email, string senhaHash)
         {
-            if(string.IsNullOrWhiteSpace(nome))
-                throw new ArgumentException("Nome é obirgatório");
-            if(string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("Email é obirgatório");
+            ValidarNome(nome);
+            ValidarEmail(email);
+            ValidarEmail(senhaHash);
+
 
             
-            Nome = nome;
-            Email = email;
+            Nome = nome.Trim();
+            Email = email.Trim().ToLower();
             Senha_hash = senhaHash;
             Ativo = true;
             Data_Criacao = DateTime.UtcNow;
