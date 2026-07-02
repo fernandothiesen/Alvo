@@ -2,6 +2,7 @@ using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Domain.Exceptions;
+using Domain.Entities;
 namespace Entities
 {
     public class Usuario
