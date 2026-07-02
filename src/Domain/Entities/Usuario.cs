@@ -31,7 +31,6 @@ namespace Entities
             Data_Criacao = DateTime.UtcNow;
         }
 
-
         public void AtualizarUltimoLogin()
         {
             Ultimo_login = DateTime.UtcNow;
@@ -47,6 +46,12 @@ namespace Entities
             Ativo = true;
         }
 
-    }
 
+        public bool ValidarEmail(string email)
+        {
+            string email_padrao = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+            return Regex.IsMatch(email, email_padrao);
+        }
+    }
 }
