@@ -18,8 +18,11 @@ public class Contato
 
     public Contato(string tipo_contato, string valor_contato, string? observacao = null)
     {
-        Tipo_Contato = tipo_contato;
-        Valor_Contato = valor_contato;
+        ValidarTipoContato(tipo_contato);
+        ValidarValorContato(tipo_contato);
+
+        Tipo_Contato = tipo_contato.Trim();
+        Valor_Contato = valor_contato.Trim();
         Observacao = observacao;
     }
 
