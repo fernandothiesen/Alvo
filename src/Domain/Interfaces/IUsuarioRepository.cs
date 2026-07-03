@@ -4,11 +4,16 @@ using Entities;
 
 public interface IUsuario
 {
-    Task<Usuario> AdicionarUsuarioAsync(Usuario usuario);
-    Task AtualizarUsuarioAsync(Usuario usuario);
-    Task<Usuario> DeletarUsuarioAsync(Usuario usuario);
+    Task<Usuario?> ObterPorIdAsync(int id);
+    Task<Usuario?> ObterPorEmailAsync(string email);
     Task<IEnumerable<Usuario>> ObterTodosAsync();
-    Task<Usuario> ListarUsuarioPorIdAsync(int id);
-    Task<Usuario> ObterUsuarioPorEmailAsync(string email);
-    Task<Usuario> ExisteEmailAsync(string email, int? id_usuario = null);
+    Task<IEnumerable<Usuario>> ObterAtivosAsync();
+    Task<bool> EmailExistenteAsync(string email, int? idUsuarioExcluir = null);
+
+
+    //Comandos 
+
+    Task AdicionrUsuarioAsync(Usuario usuario);
+    Task AtualizarUsuarioAsync(Usuario usuario);
+    Task RemoverUsuarioAsync(int idUsuario);
 }
