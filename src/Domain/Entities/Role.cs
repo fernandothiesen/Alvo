@@ -54,7 +54,7 @@ public class Role
     }
 
 
-    private void ValidaNomeRole(string nomeRole)
+    private void ValidarNomeRole(string nomeRole)
     {
         if(string.IsNullOrWhiteSpace(nomeRole))
             throw new DomainException("Nome da role e obrigatorio");
