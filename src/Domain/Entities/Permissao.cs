@@ -14,16 +14,16 @@ public class Permissao
     {
         ValidarNomePermissao(nomePermissao);
 
-        NomePermissao = nomePermissao;
-        Descricao = descricao;
+        NomePermissao = nomePermissao.Trim();
+        Descricao = descricao.Trim();
     }
 
     public void Atualizar(string nomePermissao, string? descricao)
     {
         ValidarNomePermissao(nomePermissao);
 
-        NomePermissao = nomePermissao;
-        Descricao = descricao;
+        NomePermissao = nomePermissao.Trim();
+        Descricao = descricao.Trim();
     }
 
 
