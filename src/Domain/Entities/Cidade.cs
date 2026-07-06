@@ -45,8 +45,4 @@ public class Cidade
             throw new DomainException("Nome da cidade nao pode possuir mais que 100 caracteres");
     }
 
-
-
-
-
 }
