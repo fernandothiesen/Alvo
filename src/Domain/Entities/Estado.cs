@@ -41,13 +41,13 @@ public class Estado
         SiglaEstado = siglaEstado.Trim().ToUpper();
     }
 
-    public void ValidarIdPais(int idPais)
+    private void ValidarIdPais(int idPais)
     {
         if(idPais <= 0)
             throw new DomainException("ID do pais deve ser maior que zero");
     }
 
-    public void ValidarNomeEstado(string nomeEstado)
+    private void ValidarNomeEstado(string nomeEstado)
     {
         if(string.IsNullOrWhiteSpace(nomeEstado))
             throw new DomainException("Nome do estado e obrigatorio");
@@ -56,7 +56,7 @@ public class Estado
             throw new DomainException("Nome do estado deve ter no maximo 100 caracteres");
     }
 
-    public void ValidarSiglaEstado(string siglaEstado)
+    private void ValidarSiglaEstado(string siglaEstado)
     {
         if(string.IsNullOrWhiteSpace(siglaEstado))
             throw new DomainException("sigla do estado e obrigatorio");
