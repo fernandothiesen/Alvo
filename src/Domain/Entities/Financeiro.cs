@@ -51,7 +51,7 @@ public class Financeiro
 
 
 
-    public void Atualizar(string tipo, decimal valor, DateOnly dataMovimentracao, int idFormaPagamento, string? descricao, int? idEvento,
+    public void Atualizar(string tipo, decimal valor, DateOnly dataMovimentacao, int idFormaPagamento, string? descricao, int? idEvento,
     int? idDemanda, int? idFornecedor, int? idCliente, int? idConta)
     {
         ValidarTipo(tipo);
