@@ -2,9 +2,9 @@ using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Domain.Exceptions;
-using Domain.Entities;
 
-namespace Entities
+
+namespace Domain.Entities
 {
     public class Usuario
     {

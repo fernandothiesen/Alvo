@@ -1,8 +1,6 @@
 using Domain.Exceptions;
 
-namespace Domain.Entities; 
-
-
+namespace Domain.Entities;
 
 public class Evento
 {
@@ -11,23 +9,19 @@ public class Evento
     private readonly List<Demanda> _demandas = new();
     private readonly List<Financeiro> _financeiros = new();
 
-
-
-    public int IdEvento {get; private set;}
-    public string CodigoEvento {get; private set;}
-    public string Titulo {get; private set;}
-    public string? Descricao {get; private set;}
-    public DateOnly? DataInicio {get; private set;}
-    public DateOnly? DataFim {get; private set;}
-    public string? Local {get; private set;}
-    public string? MesReferencia {get; private set;}
-    public DateOnly? LimiteEntregaMaterial {get; private set;}
-    public string? Status {get; private set;}
-    public string? Observacoes {get; private set;}
-    public int? IdCidade {get; private set;}
-    public int? IdUsuarioResponsavel {get; private set;}
-
-
+    public int IdEvento { get; private set; }
+    public string CodigoEvento { get; private set; }
+    public string Titulo { get; private set; }
+    public string? Descricao { get; private set; }
+    public DateOnly? DataInicio { get; private set; }
+    public DateOnly? DataFim { get; private set; }
+    public string? Local { get; private set; }
+    public string? MesReferencia { get; private set; }
+    public DateOnly? LimiteEntregaMaterial { get; private set; }
+    public string? Status { get; private set; }
+    public string? Observacoes { get; private set; }
+    public int? IdCidade { get; private set; }
+    public int? IdResponsavel { get; private set; }
 
     public Cidade? Cidade { get; private set; }
     public Usuario? Responsavel { get; private set; }
@@ -36,25 +30,23 @@ public class Evento
     public IReadOnlyCollection<Demanda> Demandas => _demandas.AsReadOnly();
     public IReadOnlyCollection<Financeiro> Financeiros => _financeiros.AsReadOnly();
 
-    protected Evento(){}
+    protected Evento() { }
 
-
-    public Evento(string codigoEvento, string titulo, string? descricao = null, int? idCidade = null, int? idResponsavel = null)
+    public Evento(string codigoEvento, string titulo, int? idCidade = null, int? idResponsavel = null)
     {
         ValidarCodigoEvento(codigoEvento);
-        ValidarTitulo(Titulo);
-
+        ValidarTitulo(titulo);
 
         CodigoEvento = codigoEvento.Trim();
         Titulo = titulo.Trim();
         IdCidade = idCidade;
-        IdUsuarioResponsavel = idResponsavel;
+        IdResponsavel = idResponsavel;
     }
 
-
-    public void Atulizar(string codigoEvento, string titulo, string? descricao, DateOnly? dataInicio, DateOnly? dataFim, 
-    string? local, string? mesReferencia, DateOnly? limiteEntregaMaterial, string? status, string? observacoes, int? idCidade, 
-    int idResponsavel)
+    public void Atualizar(string codigoEvento, string titulo, string? descricao, 
+        DateOnly? dataInicio, DateOnly? dataFim, string? local, string? mesReferencia,
+        DateOnly? limiteEntregaMaterial, string? status, string? observacoes,
+        int? idCidade, int? idResponsavel)
     {
         ValidarCodigoEvento(codigoEvento);
         ValidarTitulo(titulo);
@@ -62,6 +54,7 @@ public class Evento
 
         CodigoEvento = codigoEvento.Trim();
         Titulo = titulo.Trim();
+        Descricao = descricao?.Trim();
         DataInicio = dataInicio;
         DataFim = dataFim;
         Local = local?.Trim();
@@ -70,50 +63,42 @@ public class Evento
         Status = status?.Trim();
         Observacoes = observacoes?.Trim();
         IdCidade = idCidade;
-        IdUsuarioResponsavel = idResponsavel;
+        IdResponsavel = idResponsavel;
     }
 
-
-
-    public void AdicionarCliente (EventoCliente eventoCliente)
+    public void AdicionarCliente(EventoCliente eventoCliente)
     {
-        if(_clientes.Any(c => c.idCliente == eventoCliente.idCliente))
-            throw new DomainException("Esse evento ja existe para esse cliente");
+        if (_clientes.Any(c => c.IdCliente == eventoCliente.IdCliente))
+            throw new DomainException("Evento já possui este cliente");
 
         _clientes.Add(eventoCliente);
     }
 
     public void RemoverCliente(int idCliente)
     {
-        var clienteRemover = _clientes.FirstOrDefault(c => c.IdCliente == idCliente);
+        var cliente = _clientes.FirstOrDefault(c => c.IdCliente == idCliente);
+        if (cliente == null)
+            throw new DomainException("Cliente não encontrado para este evento");
 
-
-        if(clienteRemover == null)
-            throw new DomainException("Cliente nao encontrado para esse evento");
+        _clientes.Remove(cliente);
     }
 
     public void AdicionarFornecedor(EventoFornecedor eventoFornecedor)
     {
-        if(_fornecedores.Any(f => f.IdFornecedor == eventoFornecedor.IdFornecedor))
-            throw new DomainException("Evento ja possui este fornecedor");
+        if (_fornecedores.Any(f => f.IdFornecedor == eventoFornecedor.IdFornecedor))
+            throw new DomainException("Evento já possui este fornecedor");
 
-        _clientes.Add(eventoFornecedor);
+        _fornecedores.Add(eventoFornecedor);
     }
-
 
     public void RemoverFornecedor(int idFornecedor)
     {
-        var fornecedorRemover = _fornecedores.FirstOrDefault(f => f.IdForneceodor == idFornecedor);
+        var fornecedor = _fornecedores.FirstOrDefault(f => f.IdFornecedor == idFornecedor);
+        if (fornecedor == null)
+            throw new DomainException("Fornecedor não encontrado para este evento");
 
-        if(fornecedorRemover == null)
-        {
-            throw new DomainException("Fornecedor nao existe para esse evento");
-        }
-
-
-        _fornecedores.Remove(fornecedorRemover);
+        _fornecedores.Remove(fornecedor);
     }
-
 
     private void ValidarCodigoEvento(string codigoEvento)
     {
@@ -136,12 +121,9 @@ public class Evento
             throw new DomainException("Título do evento deve ter no máximo 200 caracteres");
     }
 
-
     private void ValidarDatas(DateOnly? dataInicio, DateOnly? dataFim)
     {
-        if(dataInicio.HasValue && dataFim.HasValue && dataInicio > dataFim)
-        {
-            throw new DomainException("Data de inicio nao pode ser maior que a data fim");
-        }
+        if (dataInicio.HasValue && dataFim.HasValue && dataInicio > dataFim)
+            throw new DomainException("Data de início não pode ser maior que a data de fim");
     }
 }

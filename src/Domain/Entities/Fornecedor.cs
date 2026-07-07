@@ -140,10 +140,10 @@ public class Fornecedor
         if(contaRemover == null)
             throw new DomainException("Essa conta nao existe");
 
-        _contasBancarias.Remove(idConta);
+        _contasBancarias.Remove(contaRemover);
     }
 
-     public void AdicionarServico(FornecedorServico fornecedorServico)
+    public void AdicionarServico(FornecedorServico fornecedorServico)
     {
         if (_servicos.Any(s => s.IdServico == fornecedorServico.IdServico))
             throw new DomainException("Fornecedor já possui este serviço");
