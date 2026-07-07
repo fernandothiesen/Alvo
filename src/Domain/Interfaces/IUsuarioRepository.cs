@@ -1,5 +1,5 @@
 using System;
-using Entities;
+using Domain.Entities;
 
 namespace Domain.Interfaces;
 public interface IUsuario
