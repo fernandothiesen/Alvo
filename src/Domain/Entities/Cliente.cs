@@ -7,7 +7,7 @@ public class Cliente
 {
    private readonly List<ClienteContato> _contatos = new();
    private readonly List<ClienteDocumento> _documentos = new();
-   private readonly List<Eventocliente> _eventos = new();
+   private readonly List<EventoCliente  > _eventos = new();
    private readonly List<DemandaCliente> _demandas = new();
 
    public int IdCliente {get; private set;}

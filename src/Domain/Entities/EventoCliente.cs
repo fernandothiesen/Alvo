@@ -15,7 +15,7 @@ public class EventoCliente
 
     public EventoCliente(int idEvento, int idCliente)
     {
-        idEvento = idEvento;
-        idCliente = idCliente;
+       IdEvento = idEvento;
+       IdCliente = idCliente;
     }
 }
