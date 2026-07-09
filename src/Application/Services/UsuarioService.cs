@@ -59,8 +59,8 @@ public class UsuarioService : IUsuarioService
 
             //att dados basicos 
 
-            usuario.A(dto.Nome);
-            usuario.AtualizarEmail(dto.Email);
+            usuario.AtualizarNome(dto.Nome);
+            usuario.At
 
 
 

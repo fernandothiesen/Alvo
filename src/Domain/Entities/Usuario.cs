@@ -57,6 +57,12 @@ namespace Domain.Entities
             Senha_hash = novaSenhaHash;            
         }
 
+        public void AtualizarEmail(string email)
+        {
+            ValidarEmail(email);
+            Email = email.Trim();
+        }
+
 
         public void Ativar()
         {
