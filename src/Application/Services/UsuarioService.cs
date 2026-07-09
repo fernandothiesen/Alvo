@@ -60,14 +60,76 @@ public class UsuarioService : IUsuarioService
             //att dados basicos 
 
             usuario.AtualizarNome(dto.Nome);
-            usuario.At
+            usuario.AtualizarEmail(dto.Email);
 
 
+            if(!string.IsNullOrEmpty(dto.Senha))
+            {
+                var senhaNovaHash = _passwordHasher.HashPassword(dto.Senha);
+                usuario.AtualizarSenha(senhaNovaHash);
+            }
 
+
+            await _usuarioRepository.AtualizarAsync(usuario);
+            return ResponseResult.Sucesso("Usuario atualizado com sucesso!");
+        }catch(DomainException ex)
+        {
+            return ResponseResult.Erro(ex.Message);
         }
-
-
     }
 
 
+    public async Task<ResponseResult> DesativarAsync(int id)
+    {
+        var usuario = await _usuarioRepository.ObterPorIdAsync(id);
+
+        if(usuario == null)
+            return ResponseResult.Erro("Esse usuario nao existe");
+
+
+        usuario.Desativar();
+        await _usuarioRepository.AtualizarAsync(usuario);
+
+        return ResponseResult.Sucesso("Usuario desativado com sucesso");
+    }
+
+
+
+    public async Task<UsuarioDto?> ObterPorIdAsync(int id)
+    {
+        var usuario = await _usuarioRepository.ObterPorIdAsync(id);
+
+        if(usuario == null)
+            return null;
+
+        return new UsuarioDto
+        {
+            IdUsuario = usuario.Id_usuario,
+            Nome = usuario.Nome,
+            Email = usuario.Email,
+            Ativo = usuario.Ativo,
+            DataCriacao = usuario.Data_Criacao,
+            UltimoLogin = usuario.Ultimo_login,
+            Roles = usuario.Roles.Select(r => r.Role!.NomeRole).ToList()
+        };
+    }
+
+
+    public async Task<IEnumerable<UsuarioDto>> ObterTodosAsync()
+    {
+        var usuarios = await _usuarioRepository.ObterTodosAsync();
+
+        return usuarios.Select(u => new UsuarioDto
+        {
+            IdUsuario = u.Id_usuario,
+            Nome = u.Nome,
+            Email = u.Email,
+            Ativo = u.Ativo,
+            DataCriacao = u.Data_Criacao,
+            UltimoLogin = u.Ultimo_login,
+            Roles = u.Roles.Select(r => r.Role!.NomeRole).ToList()
+        });
+
+
+    }
 }

@@ -10,5 +10,5 @@ public class UsuarioDto
     public bool Ativo {get; set;}
     public DateTime DataCriacao {get; set;}
     public DateTime? UltimoLogin {get; set;}
-    List<string> Roles {get; set;} = new();
+    public List<string> Roles {get; set;} = new();
 }
