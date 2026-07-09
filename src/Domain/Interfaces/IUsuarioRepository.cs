@@ -2,7 +2,7 @@ using System;
 using Domain.Entities;
 
 namespace Domain.Interfaces;
-public interface IUsuario : IRepository<Cliente>
+public interface IUsuario : IRepository<Usuario>
 {
     Task<Usuario?> ObterPorEmailAsync(string email);
     Task<IEnumerable<Usuario>> ObterAtivosAsync();

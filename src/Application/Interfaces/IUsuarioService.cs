@@ -1,7 +1,7 @@
 using Application.DTOs.Usuario;
 using Application.DTOs.Response;
 
-
+namespace Application.Interfaces;  
 public interface IUsuarioService
 {
     Task<ResponseResult> CriarUsuarioAsync (CriarUsuarioDto dto);

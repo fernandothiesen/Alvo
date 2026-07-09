@@ -38,12 +38,36 @@ public class UsuarioService : IUsuarioService
 
             await _usuarioRepository.AdicionarAsync(usuario);
 
+            return ResponseResult.Sucesso("Usuario criado com sucesso!", new {Id = usuario.Id_usuario});
+        }catch(Exception ex)
+        {
+            return ResponseResult.Erro($"Erro ao criar usuario: {ex.Message}");
+        }
+    }
+
+
+    public async Task<ResponseResult> AtualizarAsync(int id, CriarUsuarioDto dto)
+    {
+        try
+        {
+            var usuario = await _usuarioRepository.ObterPorIdAsync(id);
+            if(usuario == null)
+            {
+                return ResponseResult.Erro("Usuario nao encontrado");
+            }
+
+
+            //att dados basicos 
+
+            usuario.A(dto.Nome);
+            usuario.AtualizarEmail(dto.Email);
+
+
 
         }
 
 
     }
-
 
 
 }
