@@ -28,7 +28,7 @@ public class UsuarioService : IUsuarioService
     {
         try
         {
-            if(await _usuarioRepository.EmailExistenteAsync(dto.Email))
+            if(await _usuarioRepository.EmailExisteAsync(dto.Email))
                 return ResponseResult.Erro("Ja existe um Usuario com este email");
 
             //(usando a interface, mas infrastructure vai usar BCrypt)
