@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
-namespace Infrastructure.Data;
+namespace Infrastructure.Data.Mappings;
 
 
 public class RoleMap : IEntityTypeConfiguration<Role>

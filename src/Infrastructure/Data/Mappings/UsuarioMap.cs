@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
 
-namespace Infrastructure.Data;
+namespace Infrastructure.Data.Mappings;
 
 public class UsuarioMap : IEntityTypeConfiguration<Usuario>
 {
