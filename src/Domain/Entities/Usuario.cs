@@ -12,13 +12,13 @@ namespace Domain.Entities
         private readonly List<UsuarioRole> _roles = new();
         private readonly List<UsuarioPermissao> _permissoes = new();
         private readonly List<UsuarioContato> _contatos = new();
-        public int Id_usuario {get; private set;}
+        public int IdUsuario {get; private set;}
         public string Nome {get; private set;}
         public string Email {get; private set;}
-        public string Senha_hash {get; private set;}
+        public string SenhaHash {get; private set;}
         public bool Ativo {get; private set;}
-        public DateTime Data_Criacao {get; private set;}
-        public DateTime? Ultimo_login {get; private set;}
+        public DateTime DataCriacao {get; private set;}
+        public DateTime? UltimoLogin {get; private set;}
 
 
 
@@ -40,9 +40,9 @@ namespace Domain.Entities
             
             Nome = nome.Trim();
             Email = email.Trim().ToLower();
-            Senha_hash = senhaHash;
+            SenhaHash = senhaHash;
             Ativo = true;
-            Data_Criacao = DateTime.UtcNow;
+            DataCriacao = DateTime.UtcNow;
         }
 
         public void AtualizarNome(string novoNome)
@@ -54,7 +54,7 @@ namespace Domain.Entities
         public void AtualizarSenha(string novaSenhaHash)
         {
             ValidarSenhaHash(novaSenhaHash);
-            Senha_hash = novaSenhaHash;            
+            SenhaHash = novaSenhaHash;            
         }
 
         public void AtualizarEmail(string email)
@@ -76,7 +76,7 @@ namespace Domain.Entities
 
         public void RegistrarLogin()
         {
-            Ultimo_login = DateTime.UtcNow;
+            UltimoLogin = DateTime.UtcNow;
         }
 
 
