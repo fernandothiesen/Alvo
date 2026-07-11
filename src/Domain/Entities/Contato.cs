@@ -6,8 +6,8 @@ namespace Domain.Entities;
 public class Contato
 {
     public int IdContato {get; private set;}
-    public string Tipo_Contato {get; private set;}
-    public string Valor_Contato {get; private set;}
+    public string TipoContato {get; private set;}
+    public string ValorContato {get; private set;}
     public string? Observacao {get; private set;}
     public bool? Ativo {get; private set;}
 
@@ -21,8 +21,8 @@ public class Contato
         ValidarTipoContato(tipo_contato);
         ValidarValorContato(tipo_contato);
 
-        Tipo_Contato = tipo_contato.Trim();
-        Valor_Contato = valor_contato.Trim();
+        TipoContato = tipo_contato.Trim();
+        ValorContato = valor_contato.Trim();
         Observacao = observacao;
     }
 
@@ -59,8 +59,8 @@ public class Contato
         ValidarTipoContato(tipo_contato);
         ValidarValorContato(valor_contato);
 
-        Tipo_Contato = tipo_contato;
-        Valor_Contato = valor_contato;
+        TipoContato = tipo_contato;
+        ValorContato = valor_contato;
         Observacao = observacao;
     }
 

@@ -38,7 +38,7 @@ public class UsuarioService : IUsuarioService
 
             await _usuarioRepository.AdicionarAsync(usuario);
 
-            return ResponseResult.Sucesso("Usuario criado com sucesso!", new {Id = usuario.Id_usuario});
+            return ResponseResult.Sucesso("Usuario criado com sucesso!", new {Id = usuario.IdUsuario});
         }catch(Exception ex)
         {
             return ResponseResult.Erro($"Erro ao criar usuario: {ex.Message}");
@@ -104,12 +104,12 @@ public class UsuarioService : IUsuarioService
 
         return new UsuarioDto
         {
-            IdUsuario = usuario.Id_usuario,
+            IdUsuario = usuario.IdUsuario,
             Nome = usuario.Nome,
             Email = usuario.Email,
             Ativo = usuario.Ativo,
-            DataCriacao = usuario.Data_Criacao,
-            UltimoLogin = usuario.Ultimo_login,
+            DataCriacao = usuario.DataCriacao,
+            UltimoLogin = usuario.UltimoLogin,
             Roles = usuario.Roles.Select(r => r.Role!.NomeRole).ToList()
         };
     }
@@ -121,12 +121,12 @@ public class UsuarioService : IUsuarioService
 
         return usuarios.Select(u => new UsuarioDto
         {
-            IdUsuario = u.Id_usuario,
+            IdUsuario = u.IdUsuario,
             Nome = u.Nome,
             Email = u.Email,
             Ativo = u.Ativo,
-            DataCriacao = u.Data_Criacao,
-            UltimoLogin = u.Ultimo_login,
+            DataCriacao = u.DataCriacao,
+            UltimoLogin = u.UltimoLogin,
             Roles = u.Roles.Select(r => r.Role!.NomeRole).ToList()
         });
 

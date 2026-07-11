@@ -10,7 +10,7 @@ public class Pais
     public int IdPais {get; private set;}
     public string NomePais {get; private set;}
 
-    public string Codigo_Iso {get; private set;}
+    public string CodigoIso {get; private set;}
 
 
     protected Pais(){}
@@ -21,7 +21,7 @@ public class Pais
         ValidarCodigoPais(codigo_iso);
 
         NomePais = nome_pais.Trim();
-        Codigo_Iso = codigo_iso.Trim();
+        CodigoIso = codigo_iso.Trim();
     }
 
 
@@ -32,7 +32,7 @@ public class Pais
         ValidarCodigoPais(codigo_iso);
 
         NomePais = nome_pais.Trim();
-        Codigo_Iso = codigo_iso.Trim();
+        CodigoIso = codigo_iso.Trim();
     }
 
     private void ValidarNomePais(string nome_pais)

@@ -30,7 +30,7 @@ public class AuthService : IAuthService
         if(!usuario.Ativo)
             return ResponseResult.Erro("Usuario desativado. Entre em contato com o administrador");
 
-        if(!_passwordHasher.VerifyPassword(loginDto.Senha, usuario.Senha_hash))
+        if(!_passwordHasher.VerifyPassword(loginDto.Senha, usuario.SenhaHash))
             return ResponseResult.Erro("Email ou senha invalidos");
 
         usuario.RegistrarLogin();
@@ -61,7 +61,7 @@ public class AuthService : IAuthService
             Expiracao = DateTime.UtcNow.AddHours(2),
             Usuario = new UsuarioDto
             {
-                IdUsuario = usuario.Id_usuario,
+                IdUsuario = usuario.IdUsuario,
                 Nome = usuario.Nome,
                 Email = usuario.Email,
                 Roles = roles

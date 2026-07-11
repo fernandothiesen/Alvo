@@ -6,9 +6,9 @@ namespace Domain.Entities;
 public class Documento
 {
     public int IdDocumento {get; private set;}
-    public string Tipo_Documento {get; private set; }
+    public string TipoDocumento {get; private set; }
 
-    public string Valor_Documento {get; private set;}
+    public string ValorDocumento {get; private set;}
     public bool? Ativo {get; private set;}
     public DateOnly? DataValidacao {get; private set;}
 
@@ -20,8 +20,8 @@ public class Documento
         ValidarTipoDocumento(tipo_documento);
         ValidarValorDocumento(valor_documento);
 
-        Tipo_Documento = tipo_documento.Trim();
-        Valor_Documento = valor_documento.Trim();
+        TipoDocumento = tipo_documento.Trim();
+        ValorDocumento = valor_documento.Trim();
         Ativo = true;
     }
 
@@ -60,8 +60,8 @@ public class Documento
         ValidarValorDocumento(valor_documento);
 
 
-        Tipo_Documento = tipo_documento;
-        Valor_Documento = valor_documento;
+        TipoDocumento = tipo_documento;
+        ValorDocumento = valor_documento;
         DataValidacao = dataValidacao;
         
     }
