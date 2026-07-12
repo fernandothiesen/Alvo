@@ -8,27 +8,20 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-
 
 
 var builder = WebApplication.CreateBuilder();
 
+//DI Services
 
-
-// Services configurations 
-
-
-//Infrastructure (DB, Repositories, Auth services)
+// Infrastructure (DB, Repositories, Auth services)
 builder.Services.AddInfrastructure(builder.Configuration);
 
-//Application services
+// Application services
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-
-//JWt && Auth configurations
-
+// JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,18 +38,16 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!))      
+            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!))
     };
 
-
-    //receives token by string query (good for swagger)
+    // Recebe token por string query (útil para Swagger/WebSockets)
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
         {
             var accessToken = context.Request.Query["access_token"];
-            var path = context.HttpContext.Request.Path;
-            if(!string.IsNullOrEmpty(accessToken))
+            if (!string.IsNullOrEmpty(accessToken))
             {
                 context.Token = accessToken;
             }
@@ -65,70 +56,72 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
-//Authorization config
-
+// Authorization config
 builder.Services.AddAuthorization();
 
 // Swagger config
-
-
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddOpenApi(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
-        Title = "Sistema Alvo API",
-        Version = "v1",
-        Description = "API for managing events, costumers, demandas, supplier",
-        Contract = new OpenApiContact
+        // 1. Garantir instâncias dos componentes de segurança
+        document.Components ??= new Microsoft.OpenApi.Models.OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, Microsoft.OpenApi.Models.OpenApiSecurityScheme>();
+        
+        // 2. Define o esquema do JWT Bearer
+        var securityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
-            Name = "Fernando Thiesen Dalla Valle",
-            Email = "fernandothiesen17@gmail.com"
-        }
-    });
+            Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            Description = "JWT Authorization header usando o esquema Bearer. Exemplo: 'Bearer {token}'"
+        };
 
+        document.Components.SecuritySchemes.Add("Bearer", securityScheme);
 
-    //auth config 
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-         Description = "JWT Authorization header usando o esquema Bearer. Exemplo: \"Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+        // 3. Criar o requisito que referencia o "Bearer" definido acima
+        var securityRequirement = new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
         {
-            new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
+                new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                    {
+                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        };
+
+        // 4. Aplicar o requisito de segurança em TODAS as rotas/operações da API de forma nativa
+        if (document.Paths != null)
+        {
+            foreach (var path in document.Paths.Values)
+            {
+                foreach (var operation in path.Operations.Values)
+                {
+                    operation.Security ??= new List<Microsoft.OpenApi.Models.OpenApiSecurityRequirement>();
+                    operation.Security.Add(securityRequirement);
                 }
-            },
-            Array.Empty<string>()
+            }
         }
+
+        return Task.CompletedTask;
     });
 });
 
-
-//controllers config 
-
+// Controllers config
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        //format data ISO standards 
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Mantém PascalCase do C# se desejado
         options.JsonSerializerOptions.WriteIndented = true;
     });
 
-//Cors config
-
+// Cors config
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -138,7 +131,6 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 
-    // Política mais restritiva (recomendada para produção)
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins("http://localhost:3000", "https://seu-frontend.com")
@@ -147,39 +139,33 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 var app = builder.Build();
 
+//pipeline http request
 
+// Ative para garantir tráfego criptografado
+app.UseHttpsRedirection(); 
 
-//pipeline config http
-
-
-//enable swagger development only 
-if(app.Environment.IsDevelopment())
+// Enable swagger development only
+if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+
+    app.MapOpenApi();
+
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndPoint("/swagger/v1/swagger.json", "Sistema de Eventos API v1");
+        c.SwaggerEndpoint("/openapi/v1.json", "Sistema de Eventos API v1"); 
         c.RoutePrefix = "swagger";
     });
 }
 
 
-//authentication && authorization Middleware 
+app.UseCors("AllowAll"); // Altere para "AllowFrontend" em produção
 
+// Authentication && Authorization Middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-//Cors  
-app.UseCors("AllowAll");  // Use "AllowFrontend" em produção
-
-
 app.MapControllers();
 
-
-
 app.Run();
-
