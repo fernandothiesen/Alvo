@@ -8,6 +8,7 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 
 var builder = WebApplication.CreateBuilder();
@@ -65,11 +66,9 @@ builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
-        // 1. Garantir instâncias dos componentes de segurança
         document.Components ??= new Microsoft.OpenApi.Models.OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, Microsoft.OpenApi.Models.OpenApiSecurityScheme>();
-        
-        // 2. Define o esquema do JWT Bearer
+
         var securityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
             Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
@@ -80,7 +79,6 @@ builder.Services.AddOpenApi(options =>
 
         document.Components.SecuritySchemes.Add("Bearer", securityScheme);
 
-        // 3. Criar o requisito que referencia o "Bearer" definido acima
         var securityRequirement = new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
         {
             {
@@ -96,12 +94,20 @@ builder.Services.AddOpenApi(options =>
             }
         };
 
-        // 4. Aplicar o requisito de segurança em TODAS as rotas/operações da API de forma nativa
         if (document.Paths != null)
         {
-            foreach (var path in document.Paths.Values)
+            foreach (var apiDescription in context.DescriptionGroups.SelectMany(g => g.Items))
             {
-                foreach (var operation in path.Operations.Values)
+                var hasAllowAnonymous = apiDescription.ActionDescriptor.EndpointMetadata
+                    .OfType<AllowAnonymousAttribute>().Any();
+
+                if (hasAllowAnonymous)
+                    continue;
+
+                var path = document.Paths[apiDescription.RelativePath!.Insert(0, "/")];
+                var httpMethod = Enum.Parse<Microsoft.OpenApi.Models.OperationType>(apiDescription.HttpMethod!, ignoreCase: true);
+
+                if (path.Operations.TryGetValue(httpMethod, out var operation))
                 {
                     operation.Security ??= new List<Microsoft.OpenApi.Models.OpenApiSecurityRequirement>();
                     operation.Security.Add(securityRequirement);
