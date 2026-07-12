@@ -46,8 +46,7 @@ public class AuthController : ControllerBase
             return BadRequest(resultado);
         }
 
-        _logger.LogInformation("Usuario registrado com sucesso: {Email}", loginDto.Email);
-        return CreatedAtAction(nameof(UsuariosController.ObterPorId),
-            new {controller = "Usuarios", id = resultado.Data}, resultado);
+        _logger.LogInformation("Login realizado com sucesso para o email: {Email}", loginDto.Email);
+        return Ok(resultado);
     }
 }
