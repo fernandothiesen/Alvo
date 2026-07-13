@@ -20,6 +20,7 @@ public class Fornecedor
     public bool Ativo {get; private set;}
     public DateTime DataCadastro {get; private set;}
     public int? IdCidade {get; private set;}
+    public Cidade? Cidade {get; private set;}
 
 
     public IReadOnlyCollection<FornecedorContato> Contatos => _contatos.AsReadOnly();

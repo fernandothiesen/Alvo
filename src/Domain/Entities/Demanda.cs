@@ -17,7 +17,7 @@ public class Demanda
     public string? Prioridade {get; private set;}
     public string? Status {get; private set;}
     public DateTime DataCriacao {get; private set;}
-    public DateTime DataConclusao {get; private set;}
+    public DateTime? DataConclusao {get; private set;}
 
 
     public Evento? Evento {get; private set;}
@@ -28,12 +28,12 @@ public class Demanda
 
     protected Demanda(){}
 
-    public Demanda(string titulo, string? descricao = null, string? prioridade = null)
+   public Demanda(int idEvento, string titulo, string? descricao = null, string? prioridade = null)
     {
-        ValidarIdEvento(IdEvento);
+        ValidarIdEvento(idEvento);
         ValidarTitulo(titulo);
 
-        IdEvento = IdEvento;
+        IdEvento = idEvento;
         Titulo = titulo.Trim();
         Descricao = descricao?.Trim();
         Prioridade = prioridade?.Trim();
