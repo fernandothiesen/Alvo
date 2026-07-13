@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Application.Services;
 using Domain.Entities;
 using Infrastructure;
+using Infrastructure.Data.Interceptors;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,19 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Application services
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+    {
+        npgsqlOptions.MigrationsAssembly("Infrastructure");
+    });
+
+    // ✅ INTERCEPTOR UTC - resolve o erro DateTime
+    options.AddInterceptors(new UtcDateTimeInterceptor());
+});
 
 // JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
@@ -59,6 +73,7 @@ builder.Services.AddAuthentication(options =>
 
 // Authorization config
 builder.Services.AddAuthorization();
+
 
 // Swagger config
 builder.Services.AddEndpointsApiExplorer();
@@ -144,6 +159,8 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+
 
 var app = builder.Build();
 
