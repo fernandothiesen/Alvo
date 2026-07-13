@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
 
-namespace Infrastructure.Mappings;
+namespace Infrastructure.Data.Mappings;
 
 
 public class RolePermissaoMap : IEntityTypeConfiguration<RolePermissao>

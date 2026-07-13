@@ -10,6 +10,7 @@ public class AtividadeSistema
     public string TipoAtividade {get; private set;}
     public string? Descricao {get; private set;}
     public DateTime DataHora {get; private set;}
+    public Usuario? Usuario {get; private set;}
 
 
     protected AtividadeSistema(){}
