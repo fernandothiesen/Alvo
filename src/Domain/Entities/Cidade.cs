@@ -40,7 +40,7 @@ public class Cidade
     private void ValidarNomeCidade(string nomeCidade)
     {
         if(string.IsNullOrWhiteSpace(nomeCidade))
-            throw new DomainException("Nome do estado e obrigatorio");
+            throw new DomainException("Nome da cidade e obrigatorio");
         if(nomeCidade.Trim().Length > 100)
             throw new DomainException("Nome da cidade nao pode possuir mais que 100 caracteres");
     }

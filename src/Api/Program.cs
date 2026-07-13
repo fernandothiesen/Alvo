@@ -149,7 +149,7 @@ var app = builder.Build();
 
 //pipeline http request
 
-// Ative para garantir tráfego criptografado
+
 app.UseHttpsRedirection(); 
 
 // Enable swagger development only

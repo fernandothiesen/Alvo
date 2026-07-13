@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -31,6 +32,7 @@ public class AuthController : ControllerBase
     /// <returns>Token JWT e dados do usuário</returns>
     
     [HttpPost("login")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

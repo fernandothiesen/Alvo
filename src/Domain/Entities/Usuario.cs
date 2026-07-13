@@ -34,7 +34,7 @@ namespace Domain.Entities
         {
             ValidarNome(nome);
             ValidarEmail(email);
-            ValidarEmail(senhaHash);
+            ValidarSenhaHash(senhaHash);
 
 
             
