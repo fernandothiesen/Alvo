@@ -2,10 +2,12 @@ using Application.Interfaces;
 using Domain.Interfaces;
 using Infrastructure.Auth;
 using Infrastructure.Data;
+using Infrastructure.Data.Interceptors;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 
 public static class DependencyInjection
@@ -14,8 +16,12 @@ public static class DependencyInjection
     {
         //Db config ---> le config do DB
 
-        services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+         services.AddDbContext<ApplicationDbContext>((sp, options) => 
+        {
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            options.AddInterceptors(new UtcDateTimeInterceptor());
+        });
+            
 
         //register of repositories
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

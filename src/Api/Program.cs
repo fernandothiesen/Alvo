@@ -22,19 +22,6 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Application services
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
-{
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-    options.UseNpgsql(connectionString, npgsqlOptions =>
-    {
-        npgsqlOptions.MigrationsAssembly("Infrastructure");
-    });
-
-    // ✅ INTERCEPTOR UTC - resolve o erro DateTime
-    options.AddInterceptors(new UtcDateTimeInterceptor());
-});
 
 // JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
