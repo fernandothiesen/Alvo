@@ -71,6 +71,17 @@ public class ApplicationDbContext : DbContext
         // Aplica automaticamente todos os arquivos de mapping (IEntityTypeConfiguration) desta assembly
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
+        foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach(var property in entityType.GetProperties())
+            {
+                if(property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                {
+                    property.SetColumnType("timestamp without time zone");
+                }
+            }
+        }
+
         base.OnModelCreating(modelBuilder);
     }
 }
