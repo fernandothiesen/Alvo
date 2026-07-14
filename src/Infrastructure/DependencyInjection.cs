@@ -2,7 +2,6 @@ using Application.Interfaces;
 using Domain.Interfaces;
 using Infrastructure.Auth;
 using Infrastructure.Data;
-using Infrastructure.Data.Interceptors;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +18,6 @@ public static class DependencyInjection
          services.AddDbContext<ApplicationDbContext>((sp, options) => 
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
-            options.AddInterceptors(new UtcDateTimeInterceptor());
         });
             
 
