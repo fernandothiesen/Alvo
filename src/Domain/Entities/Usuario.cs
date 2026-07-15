@@ -82,7 +82,7 @@ namespace Domain.Entities
 
         //metodos de relacionamento 
 
-        public void AdicionarRoleUsuario(UsuarioRole usuarioRole)
+        public void AdicionarRole(UsuarioRole usuarioRole)
         {
             if(_roles.Any(r => r.IdRole == usuarioRole.IdRole))
                 throw new DomainException("Usuario ja possui role");
@@ -100,6 +100,15 @@ namespace Domain.Entities
             }
 
             _roles.Remove(role);
+        }
+
+        public void DefinirRole(List<UsuarioRole> novasRoles)
+        {
+            _roles.Clear();
+            foreach(var role in novasRoles)
+            {
+                AdicionarRole(role);
+            }
         }
 
 
