@@ -1,4 +1,6 @@
 using Application.Interfaces;
+using Application.Services;
+using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Auth;
 using Infrastructure.Data;
@@ -24,6 +26,7 @@ public static class DependencyInjection
         //register of repositories
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUsuario, UsuarioRepository>();
+        services.AddScoped<IRoleService, RoleService>();
 
         //register of auth services
         services.AddScoped<IPasswordHasher, PasswordHasher>();
