@@ -23,6 +23,8 @@ public class CriarUsuarioDto
     [Compare("Senha", ErrorMessage = "As senhas nao coincidem")]
     public string ConfirmarSenha {get; set;} = string.Empty;
 
+    [Required(ErrorMessage = "Define um papel para o usuario")]
+    public int? IdRole {get; set;}
 
     //Roles opcionais na criacao 
     public List<int> IdsRoles {get; set;} = new();

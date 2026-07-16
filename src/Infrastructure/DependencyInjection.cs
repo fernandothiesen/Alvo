@@ -17,7 +17,7 @@ public static class DependencyInjection
     {
         //Db config ---> le config do DB
 
-         services.AddDbContext<ApplicationDbContext>((sp, options) => 
+        services.AddDbContext<ApplicationDbContext>((sp, options) => 
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });

@@ -37,6 +37,29 @@ public class UsuarioService : IUsuarioService
 
             await _usuarioRepository.AdicionarAsync(usuario);
 
+
+            var todasAsRoles = new List<int>();
+
+
+            if(dto.IdRole.HasValue)
+            {
+                todasAsRoles.Add(dto.IdRole.Value);
+            }
+
+            todasAsRoles.AddRange(dto.IdsRoles);
+            todasAsRoles = todasAsRoles.Distinct().ToList();
+
+
+            if(todasAsRoles.Any())
+            {
+                var novasRoles = todasAsRoles
+                    .Select(idRole => new UsuarioRole(usuario.IdUsuario, idRole))
+                    .ToList();
+
+                usuario.DefinirRole(novasRoles);
+                await _usuarioRepository.AtualizarRolesAsync(usuario, novasRoles);
+            }
+
             return ResponseResult.Sucesso("Usuario criado com sucesso!", new {Id = usuario.IdUsuario});
         }catch(Exception ex)
         {
@@ -60,8 +83,7 @@ public class UsuarioService : IUsuarioService
 
             usuario.AtualizarNome(dto.Nome);
             usuario.AtualizarEmail(dto.Email);
-
-
+            
             if(!string.IsNullOrEmpty(dto.Senha))
             {
                 var senhaNovaHash = _passwordHasher.HashPassword(dto.Senha);
@@ -70,6 +92,25 @@ public class UsuarioService : IUsuarioService
 
 
             await _usuarioRepository.AtualizarAsync(usuario);
+
+
+            var todasAsRoles = new List<int>();
+
+            if(dto.IdRole.HasValue)
+            {
+                todasAsRoles.Add(dto.IdRole.Value);
+            }
+
+            todasAsRoles.AddRange(dto.IdsRoles);
+            todasAsRoles = todasAsRoles.Distinct().ToList();
+
+            var novasRoles = todasAsRoles
+                .Select(idRole => new UsuarioRole(usuario.IdUsuario, idRole))
+                .ToList();
+
+            usuario.DefinirRole(novasRoles);
+            await _usuarioRepository.AtualizarRolesAsync(usuario, novasRoles);
+
             return ResponseResult.Sucesso("Usuario atualizado com sucesso!");
         }catch(DomainException ex)
         {
