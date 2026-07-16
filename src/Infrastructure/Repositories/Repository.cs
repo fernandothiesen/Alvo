@@ -19,7 +19,7 @@ public class Repository<T> : IRepository<T> where T : class
     }
 
     public async Task<T?> ObterPorIdAsync(int id) => await _dbSet.FindAsync(id);
-    public async Task<IEnumerable<T>> ObterTodosAsync() => await _dbSet.ToListAsync();
+    public virtual async Task<IEnumerable<T>> ObterTodosAsync() => await _dbSet.ToListAsync();
 
 
     public async Task AdicionarAsync(T entity)
