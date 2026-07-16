@@ -1,3 +1,4 @@
+using Application.DTOs.Role;
 using Application.DTOs.Usuario;
 using Application.Interfaces;
 using Domain.Entities;
@@ -147,6 +148,23 @@ public class UsuariosController : ControllerBase
         return CreatedAtAction(nameof(ObterPorId), new {Id = resultado.Data}, resultado);
     }
 
+
+    ///<summary>
+    /// Atualizar role de usuario
+    
+
+    [HttpPut("{id}/roles")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize]
+
+    public async Task<IActionResult> AtualizarRoles(int id, [FromBody] RoleDto dto)
+    {
+        _logger.LogInformation("Atualizando roles do usuario ID: {Id}", id);
+
+        var resultado = await _usuarioService.
+    }
 }
     
 
