@@ -141,30 +141,27 @@ public class UsuarioService : IUsuarioService
             if(usuario == null)
                 return ResponseResult.Erro("Usuario nao encontrado");
 
-
-
             var novasRoles = new List<UsuarioRole>();
 
             if(dto.IdsRoles != null)
             {
-                foreach(var idRole in dto.IdsRoles)
+                foreach(var idRole in dto.IdsRoles)   // corrigido
                 {
                     novasRoles.Add(new UsuarioRole(idUsuario, Convert.ToInt32(idRole)));
                 }
             }
 
+            usuario.DefinirRole(novasRoles);  
 
-            usuario.DefinirRole(novasRoles);
-
-
-            await _usuarioRepository.AtualizarAsync(usuario);
-
+            await _usuarioRepository.AtualizarRolesAsync(usuario, novasRoles);   
 
             return ResponseResult.Sucesso("Roles do usuario atualizada com sucesso");
-        }catch(DomainException ex)
+        }
+        catch(DomainException ex)
         {
             return ResponseResult.Erro(ex.Message);
-        }catch(Exception ex)
+        }
+        catch(Exception ex)
         {
             return ResponseResult.Erro($"Erro ao atualizar roles: {ex.Message}");
         }
