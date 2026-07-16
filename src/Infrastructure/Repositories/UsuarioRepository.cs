@@ -96,4 +96,26 @@ public class UsuarioRepository : Repository<Usuario>, IUsuario
         await _context.SaveChangesAsync();
     }
 
+
+    public async Task AtualizarPermissoesAsync(Usuario usuario, List<UsuarioPermissao> novasPermissoes)
+    {
+        var permissoesAtuais = await _context.UsuarioPermissoes
+            .Where(up => up.IdUsuario == usuario.IdUsuario)
+            .ToListAsync();
+
+        var paraRemover = permissoesAtuais
+            .Where(atual => !novasPermissoes.Any(nova => nova.IdPermissao == atual.IdPermissao))
+            .ToList();
+        _context.UsuarioPermissoes.RemoveRange(paraRemover);
+
+
+        var paraAdicionar = permissoesAtuais
+            .Where(atual => !novasPermissoes.Any(nova => nova.IdPermissao == nova.IdPermissao))
+            .ToList();
+        await _context.UsuarioPermissoes.AddRangeAsync(paraAdicionar);
+
+
+        await _context.SaveChangesAsync();
+    }
+
 }

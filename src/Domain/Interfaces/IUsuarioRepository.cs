@@ -12,4 +12,5 @@ public interface IUsuario : IRepository<Usuario>
     Task<IEnumerable<string>> ObterPermissoesPorUsuarioAsync(int idUsuario); // <-- NOVO
     Task<bool> EmailExisteAsync(string email, int? idUsuarioExcluir = null);
     Task AtualizarRolesAsync(Usuario usuario, List<UsuarioRole> novasRoles);
+    Task AtualizarPermissoesAsync(Usuario usuario, List<UsuarioPermissao> novasPermissoes);
 }
