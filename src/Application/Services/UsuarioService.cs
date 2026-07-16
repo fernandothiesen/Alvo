@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using Application.DTOs.Role;
+using Application.DTOs.Permissao;
 
 
 
@@ -201,6 +202,33 @@ public class UsuarioService : IUsuarioService
         catch(Exception ex)
         {
             return ResponseResult.Erro($"Erro ao atualizar roles: {ex.Message}");
+        }
+    }
+
+
+    public async Task<ResponseResult> AtualizarPermissoesAsync(int idUsuario, AtualizarPermissaoDto dto)
+    {
+        try
+        {
+            var usuario = await _usuarioRepository.ObterPorIdComRolesAsync(idUsuario);
+
+            if(usuario == null)
+            {
+                return ResponseResult.Erro("Usuario nao encontrado");
+            }
+
+
+            var novasPermissoes = dto.IdsPermissoes
+                .Select(idPermissao => new UsuarioPermissao(idUsuario, idPermissao))
+                .ToList();
+
+            usuario.DefinirPermissao(novasPermissoes);
+            await _usuarioRepository.AtualizarPermissoesAsync(usuario, novasPermissoes);
+
+            return ResponseResult.Sucesso("Permissoes do usuario atualizadas com sucesso");
+        }catch(DomainException ex)
+        {
+            return ResponseResult.Erro(ex.Message);
         }
     }
 }
