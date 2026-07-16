@@ -120,6 +120,14 @@ namespace Domain.Entities
             _permissoes.Add(usuarioPermissao);
         }
 
+        public void DefinirPermissao(List<UsuarioPermissao> novasPermissoes)
+        {
+            _permissoes.Clear();
+            foreach(var p in novasPermissoes)
+            {
+                novasPermissoes.Add(p);
+            }
+        }
 
         public void RemoverPermissao(int idPermissao)
         {
