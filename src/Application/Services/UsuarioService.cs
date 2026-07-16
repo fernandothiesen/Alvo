@@ -147,7 +147,7 @@ public class UsuarioService : IUsuarioService
 
             if(dto.IdsRoles != null)
             {
-                foreach(var idRole in novasRoles)
+                foreach(var idRole in dto.IdsRoles)
                 {
                     novasRoles.Add(new UsuarioRole(idUsuario, Convert.ToInt32(idRole)));
                 }
