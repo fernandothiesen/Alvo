@@ -96,7 +96,7 @@ public class UsuarioService : IUsuarioService
 
     public async Task<UsuarioDto?> ObterPorIdAsync(int id)
     {
-        var usuario = await _usuarioRepository.ObterPorIdAsync(id);
+        var usuario = await _usuarioRepository.ObterPorIdComRolesAsync(id);   // trocado de ObterPorIdAsync
 
         if(usuario == null)
             return null;
@@ -143,17 +143,13 @@ public class UsuarioService : IUsuarioService
 
             var novasRoles = new List<UsuarioRole>();
 
-            if(dto.IdsRoles != null)
+            foreach(var idRole in dto.IdsRoles)   // dto.IdsRoles já vem inicializado com new(), não precisa checar null
             {
-                foreach(var idRole in dto.IdsRoles)   // corrigido
-                {
-                    novasRoles.Add(new UsuarioRole(idUsuario, Convert.ToInt32(idRole)));
-                }
+                novasRoles.Add(new UsuarioRole(idUsuario, idRole));   
             }
 
-            usuario.DefinirRole(novasRoles);  
-
-            await _usuarioRepository.AtualizarRolesAsync(usuario, novasRoles);   
+            usuario.DefinirRole(novasRoles);
+            await _usuarioRepository.AtualizarRolesAsync(usuario, novasRoles);
 
             return ResponseResult.Sucesso("Roles do usuario atualizada com sucesso");
         }
