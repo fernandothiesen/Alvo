@@ -25,7 +25,7 @@ public class UsuarioRepository : Repository<Usuario>, IUsuario
     }
 
 
-    public async Task<IEnumerable<Usuario>> ObterTodosAsync()
+    public override async Task<IEnumerable<Usuario>> ObterTodosAsync()
     {
         return await _dbSet
             .Include(u => u.Roles)
