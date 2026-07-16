@@ -24,6 +24,22 @@ public class UsuarioRepository : Repository<Usuario>, IUsuario
             .FirstOrDefaultAsync(u => u.Email == email);
     }
 
+
+    public async Task<IEnumerable<Usuario>> ObterTodosAsync()
+    {
+        return await _dbSet
+            .Include(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
+            .ToListAsync();
+    }
+
+    public async Task<Usuario?> ObterPorIdAsync(int id)
+    {
+        return await _dbSet
+            .Include(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.IdUsuario == id);
+    }
     public async Task<bool> EmailExisteAsync(string email, int? idUsuarioExcluir = null)
     {
         var query = _dbSet.Where(u => u.Email == email);
