@@ -1,3 +1,5 @@
+using Application.DTOs.Response;
+using Application.DTOs.Role;
 using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
@@ -72,4 +74,26 @@ public class UsuarioRepository : Repository<Usuario>, IUsuario
 
         return permissoesDasRoles.Union(permissoesDiretas).Distinct().ToList();
     }
+
+
+    public async Task AtualizarRolesAsync(Usuario usuario, List<UsuarioRole> novasRoles)
+    {
+        var rolesAtuais = await _context.UsuarioRoles
+            .Where(ur => ur.IdUsuario == usuario.IdUsuario)
+            .ToListAsync();
+
+
+        var paraRemover = rolesAtuais
+            .Where(atual => !novasRoles.Any(nova => nova.IdRole == atual.IdRole))
+            .ToList();
+        _context.UsuarioRoles.RemoveRange(paraRemover);
+
+        var paraAdicionar = novasRoles
+            .Where(nova => !rolesAtuais.Any(atual => atual.IdRole == nova.IdRole))
+            .ToList();
+        await _context.UsuarioRoles.AddRangeAsync(paraAdicionar);
+
+        await _context.SaveChangesAsync();
+    }
+
 }
