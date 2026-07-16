@@ -1,5 +1,7 @@
 using Application.DTOs.Usuario;
 using Application.DTOs.Response;
+using Application.DTOs.Role;
+
 
 namespace Application.Interfaces;  
 public interface IUsuarioService
@@ -9,4 +11,6 @@ public interface IUsuarioService
     Task<IEnumerable<UsuarioDto>> ObterTodosAsync();
     Task<ResponseResult> AtualizarAsync(int id, CriarUsuarioDto dto);
     Task<ResponseResult> DesativarAsync(int id);
+    Task<ResponseResult> AtualizarRolesAsync(int idUsuario, AtualizarRoleDto dto);
+    
 }

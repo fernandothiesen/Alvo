@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Application.DTOs.Role;
 using Domain.Interfaces;
 using Domain.Entities;
+using Application.DTOs.Response;
 
 
 namespace Application.Services;
@@ -29,4 +30,5 @@ public class RoleService : IRoleService
             Descricao = r.Descricao
         });
     }
+
 }

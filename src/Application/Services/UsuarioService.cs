@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
+using Application.DTOs.Role;
 
 
 
@@ -15,9 +16,7 @@ public class UsuarioService : IUsuarioService
 {
     
     private readonly IUsuario _usuarioRepository;
-    private readonly IPasswordHasher _passwordHasher;
-
-
+    private readonly IPasswordHasher _passwordHasher;  
     public UsuarioService(IUsuario usuarioRepository, IPasswordHasher passwordHasher)
     {
         _usuarioRepository = usuarioRepository;
@@ -131,5 +130,43 @@ public class UsuarioService : IUsuarioService
         });
 
 
+    }
+
+
+    public async Task<ResponseResult> AtualizarRolesAsync(int idUsuario, AtualizarRoleDto dto)
+    {
+        try
+        {
+            var usuario = await _usuarioRepository.ObterPorIdComRolesAsync(idUsuario);
+            if(usuario == null)
+                return ResponseResult.Erro("Usuario nao encontrado");
+
+
+
+            var novasRoles = new List<UsuarioRole>();
+
+            if(dto.IdsRoles != null)
+            {
+                foreach(var idRole in novasRoles)
+                {
+                    novasRoles.Add(new UsuarioRole(idUsuario, Convert.ToInt32(idRole)));
+                }
+            }
+
+
+            usuario.DefinirRole(novasRoles);
+
+
+            await _usuarioRepository.AtualizarAsync(usuario);
+
+
+            return ResponseResult.Sucesso("Roles do usuario atualizada com sucesso");
+        }catch(DomainException ex)
+        {
+            return ResponseResult.Erro(ex.Message);
+        }catch(Exception ex)
+        {
+            return ResponseResult.Erro($"Erro ao atualizar roles: {ex.Message}");
+        }
     }
 }

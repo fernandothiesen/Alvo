@@ -159,11 +159,23 @@ public class UsuariosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize]
 
-    public async Task<IActionResult> AtualizarRoles(int id, [FromBody] RoleDto dto)
+    public async Task<IActionResult> AtualizarRoles(int id, [FromBody] AtualizarRoleDto dto)
     {
         _logger.LogInformation("Atualizando roles do usuario ID: {Id}", id);
 
-        var resultado = await _usuarioService.
+        var resultado = await _usuarioService.AtualizarRolesAsync(id, dto);
+
+        if(!resultado.Success)
+        {
+            if(resultado.Message.Contains("não encontrado"))
+            {
+                return  NotFound(resultado);
+            }
+
+            return BadRequest(resultado);
+        }
+
+        return Ok(resultado);
     }
 }
     

@@ -33,7 +33,7 @@ public class UsuarioRepository : Repository<Usuario>, IUsuario
             .ToListAsync();
     }
 
-    public async Task<Usuario?> ObterPorIdAsync(int id)
+    public async Task<Usuario?> ObterPorIdComRolesAsync(int id)
     {
         return await _dbSet
             .Include(u => u.Roles)
