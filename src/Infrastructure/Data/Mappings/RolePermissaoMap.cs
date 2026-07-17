@@ -12,10 +12,12 @@ public class RolePermissaoMap : IEntityTypeConfiguration<RolePermissao>
     
     public void Configure(EntityTypeBuilder<RolePermissao> builder)
     {
+        builder.ToTable("role_permissao");
+
         builder.HasKey(rp => new { rp.IdRole, rp.IdPermissao});
 
         builder.HasOne(rp => rp.Role)
-            .WithMany()
+            .WithMany(r => r.Permissoes)
             .HasForeignKey(rp => rp.IdRole);
 
         builder.HasOne(rp => rp.Permissao)
