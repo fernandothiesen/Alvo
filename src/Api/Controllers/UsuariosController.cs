@@ -1,3 +1,4 @@
+using Application.DTOs.Permissao;
 using Application.DTOs.Role;
 using Application.DTOs.Usuario;
 using Application.Interfaces;
@@ -177,6 +178,31 @@ public class UsuariosController : ControllerBase
 
         return Ok(resultado);
     }
+
+    [HttpPut("{id}/permissoes")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AtualizarPermissoes(int id, [FromBody] AtualizarPermissaoDto dto)
+    {
+        var resultado = await _usuarioService.AtualizarPermissoesAsync(id, dto);
+
+        if(!resultado.Success)
+        {
+            if(!resultado.Success)
+            {
+                if(resultado.Message.Contains("não encontrado"))
+                {
+                    return NotFound(resultado);
+                }
+                
+                return BadRequest(resultado);
+            }
+        }
+
+        return Ok(resultado);
+    }
+
 }
     
 
