@@ -143,6 +143,8 @@ public class UsuarioService : IUsuarioService
         if(usuario == null)
             return null;
 
+        var permissoes = await _usuarioRepository.ObterPermissoesPorUsuarioAsync(id);
+
         return new UsuarioDto
         {
             IdUsuario = usuario.IdUsuario,
@@ -151,7 +153,8 @@ public class UsuarioService : IUsuarioService
             Ativo = usuario.Ativo,
             DataCriacao = usuario.DataCriacao,
             UltimoLogin = usuario.UltimoLogin,
-            Roles = usuario.Roles.Select(r => r.Role!.NomeRole).ToList()
+            Roles = usuario.Roles.Select(r => r.Role!.NomeRole).ToList(),
+            Permissoes = permissoes.ToList()
         };
     }
 
@@ -160,18 +163,24 @@ public class UsuarioService : IUsuarioService
     {
         var usuarios = await _usuarioRepository.ObterTodosAsync();
 
-        return usuarios.Select(u => new UsuarioDto
+        var resultado = new List<UsuarioDto>();
+        foreach (var u in usuarios)
         {
-            IdUsuario = u.IdUsuario,
-            Nome = u.Nome,
-            Email = u.Email,
-            Ativo = u.Ativo,
-            DataCriacao = u.DataCriacao,
-            UltimoLogin = u.UltimoLogin,
-            Roles = u.Roles.Select(r => r.Role!.NomeRole).ToList()
-        });
+            var permissoes = await _usuarioRepository.ObterPermissoesPorUsuarioAsync(u.IdUsuario);
+            resultado.Add(new UsuarioDto
+            {
+                IdUsuario = u.IdUsuario,
+                Nome = u.Nome,
+                Email = u.Email,
+                Ativo = u.Ativo,
+                DataCriacao = u.DataCriacao,
+                UltimoLogin = u.UltimoLogin,
+                Roles = u.Roles.Select(r => r.Role!.NomeRole).ToList(),
+                Permissoes = permissoes.ToList()
+            });
+        }
 
-
+        return resultado;
     }
 
 
@@ -231,4 +240,5 @@ public class UsuarioService : IUsuarioService
             return ResponseResult.Erro(ex.Message);
         }
     }
+
 }

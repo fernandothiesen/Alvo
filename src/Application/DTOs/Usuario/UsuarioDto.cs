@@ -11,4 +11,5 @@ public class UsuarioDto
     public DateTime DataCriacao {get; set;}
     public DateTime? UltimoLogin {get; set;}
     public List<string> Roles {get; set;} = new();
+    public List<string> Permissoes {get; set;} = new();
 }

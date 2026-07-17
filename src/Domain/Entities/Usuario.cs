@@ -103,9 +103,10 @@ namespace Domain.Entities
         }
 
         public void DefinirRole(List<UsuarioRole> novasRoles)
-        {
+        {   
+            var copia = novasRoles.ToList();
             _roles.Clear();
-            foreach(var role in novasRoles)
+            foreach(var role in copia)
             {
                 AdicionarRole(role);
             }
@@ -122,8 +123,10 @@ namespace Domain.Entities
 
         public void DefinirPermissao(List<UsuarioPermissao> novasPermissoes)
         {
+            var copia = novasPermissoes.ToList();
             _permissoes.Clear();
-            foreach(var p in novasPermissoes)
+
+            foreach(var p in copia)
             {
                 novasPermissoes.Add(p);
             }
