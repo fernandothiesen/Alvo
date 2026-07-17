@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 
 var builder = WebApplication.CreateBuilder();
@@ -21,6 +22,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Application services
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 // JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
@@ -39,7 +41,11 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!))
+            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!)),
+
+
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.Name
     };
 
     // Recebe token por string query (útil para Swagger/WebSockets)
