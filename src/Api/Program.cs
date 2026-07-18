@@ -64,7 +64,76 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Authorization config
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    // ========================================
+    // POLÍTICAS BASEADAS EM ROLES (Simples)
+    // ========================================
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("AdminOuGerente", policy => policy.RequireRole("Admin", "Gerente"));
+
+    // ========================================
+    // POLÍTICAS BASEADAS EM PERMISSÕES (Granular)
+    // ========================================
+    
+    // USUÁRIOS
+    options.AddPolicy("GerenciarUsuarios", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarUsuarios")));
+
+    // ROLES
+    options.AddPolicy("GerenciarRoles", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarRoles")));
+
+    // EVENTOS
+    options.AddPolicy("GerenciarEventos", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarEventos")));
+
+    options.AddPolicy("VisualizarEventos", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "VisualizarEventos")));
+
+    // DEMANDAS
+    options.AddPolicy("GerenciarDemandas", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarDemandas")));
+
+    // CLIENTES
+    options.AddPolicy("GerenciarClientes", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarClientes")));
+
+    // FORNECEDORES
+    options.AddPolicy("GerenciarFornecedores", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarFornecedores")));
+
+    // FINANCEIRO
+    options.AddPolicy("AcessarFinanceiro", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "AcessarFinanceiro")));
+
+    options.AddPolicy("GerenciarFinanceiro", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarFinanceiro")));
+
+    // CONTAS BANCÁRIAS
+    options.AddPolicy("GerenciarContasBancarias", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") ||
+            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarContasBancarias")));
+});
 
 
 // Swagger config
