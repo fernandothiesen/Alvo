@@ -184,7 +184,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPut("{id}/permissoes")]
-    [Authorize(Policy = "GerenciarPermissao")]
+    [Authorize(Policy = "GerenciarUsuarios")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -134,11 +134,7 @@ builder.Services.AddAuthorization(options =>
             context.User.IsInRole("Admin") ||
             context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarContasBancarias")));
 
-    // Permissoes
-    options.AddPolicy("GerenciarPermissao", policy => 
-        policy.RequireAssertion(context => 
-            context.User.IsInRole("Admin") || 
-            context.User.HasClaim(c => c.Type == "permissao" && c.Value == "GerenciarPermissao")));
+
 });
 
 
