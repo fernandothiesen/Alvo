@@ -1,4 +1,5 @@
 using Application.DTOs.Role;
+using Application.DTOs.Usuario;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,4 +32,5 @@ public class RolesController : ControllerBase
         var roles =  await _roleService.ObterTodasAsync();
         return Ok(roles);
     }   
+
 }

@@ -72,6 +72,7 @@ public class UsuariosController : ControllerBase
     /// <summary>
     
     [HttpPut("{id}")]
+    [Authorize(Policy = "GerenciarUsuarios")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -102,6 +103,7 @@ public class UsuariosController : ControllerBase
     
 
     [HttpPut("{id}/desativar")]
+    [Authorize(Policy = "GerenciarUsuarios")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -128,6 +130,7 @@ public class UsuariosController : ControllerBase
     /// Criar usuario no sistema
     
     [HttpPost]
+    [Authorize(Policy = "GerenciarUsuarios")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -155,6 +158,7 @@ public class UsuariosController : ControllerBase
     
 
     [HttpPut("{id}/roles")]
+    [Authorize(Policy = "GerenciarRoles")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -180,6 +184,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPut("{id}/permissoes")]
+    [Authorize(Policy = "GerenciarPermissao")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
