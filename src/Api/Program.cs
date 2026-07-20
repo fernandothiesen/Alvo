@@ -23,6 +23,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IEventoService, EventoService>();
 
 // JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
