@@ -6,6 +6,6 @@ public interface IFornecedorRepository : IRepository<Fornecedor>
 {
     Task<IEnumerable<Fornecedor>> ObterAtivosAsync();
     Task<Fornecedor?> ObterPorNomeAsync(string nome);
-    Task<bool> NomeExistenteAsync(string nome, int? idFornecedorExcluir = null);
+   Task<bool> NomeExisteAsync(string nome, int? idFornecedorExcluir = null);
 
 }
