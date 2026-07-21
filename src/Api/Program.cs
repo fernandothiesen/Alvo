@@ -29,6 +29,7 @@ builder.Services.AddScoped<IEstadoService, EstadoService>();
 builder.Services.AddScoped<ICidadeService, CidadeService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IFornecedorService, FornecedorService>();
+builder.Services.AddScoped<IDemandaService, DemandaService>();
 // JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
 {
