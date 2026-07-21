@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IEventoRepository, EventoRepository>();
         services.AddScoped<IPaisRepository, PaisRepository>();
+        services.AddScoped<IEstadoRepository, EstadoRepository>();
 
         //register of auth services
         services.AddScoped<IPasswordHasher, PasswordHasher>();
