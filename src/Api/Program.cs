@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IEventoService, EventoService>();
+builder.Services.AddScoped<IPaisService, PaisService>();
 
 // JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
