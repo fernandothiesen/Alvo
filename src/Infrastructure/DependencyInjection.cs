@@ -31,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<IEventoRepository, EventoRepository>();
         services.AddScoped<IPaisRepository, PaisRepository>();
         services.AddScoped<IEstadoRepository, EstadoRepository>();
+        services.AddScoped<ICidadeRepository, CidadeRepository>();
 
         //register of auth services
         services.AddScoped<IPasswordHasher, PasswordHasher>();
