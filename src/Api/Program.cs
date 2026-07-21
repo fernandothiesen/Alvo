@@ -26,6 +26,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IEventoService, EventoService>();
 builder.Services.AddScoped<IPaisService, PaisService>();
 builder.Services.AddScoped<IEstadoService, EstadoService>();
+builder.Services.AddScoped<ICidadeService, CidadeService>();
 // JWT && Auth configurations
 builder.Services.AddAuthentication(options =>
 {
