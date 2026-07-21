@@ -5,5 +5,7 @@ namespace Domain.Interfaces;
 public interface IFornecedorRepository : IRepository<Fornecedor>
 {
     Task<IEnumerable<Fornecedor>> ObterAtivosAsync();
-    Task<bool> NomeExisteAsync(string nome, int? idFornecedorExcluir = null);
+    Task<Fornecedor?> ObterPorNomeAsync(string nome);
+    Task<bool> NomeExistenteAsync(string nome, int? idFornecedorExcluir = null);
+
 }
