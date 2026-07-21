@@ -4,53 +4,27 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Mappings;
 
-public class ClienteMap : IEntityTypeConfiguration<Cliente>
+public class CidadeMap : IEntityTypeConfiguration<Cidade>
 {
-    public void Configure(EntityTypeBuilder<Cliente> builder)
+    public void Configure(EntityTypeBuilder<Cidade> builder)
     {
-        builder.ToTable("cliente");
-        builder.HasKey(c => c.IdCliente);
-
-        builder.Property(c => c.IdCliente)
-            .HasColumnName("id_cliente")
-            .UseIdentityColumn();
-
-        builder.Property(c => c.Nome)
-            .HasColumnName("nome")
-            .IsRequired()
-            .HasMaxLength(150);
-
-        builder.Property(c => c.Ativo)
-            .HasColumnName("ativo")
-            .HasDefaultValue(true);
-
-        builder.Property(c => c.DataCadastro)
-            .HasColumnName("data_cadastro")
-            .HasDefaultValueSql("NOW()");
+        builder.ToTable("cidade");
+        builder.HasKey(c => c.IdCidade);
 
         builder.Property(c => c.IdCidade)
-            .HasColumnName("id_cidade");
+            .HasColumnName("id_cidade")
+            .UseIdentityColumn();
 
-        // Relacionamento com Cidade
-        builder.HasOne(c => c.Cidade)
-            .WithMany()
-            .HasForeignKey(c => c.IdCidade);
+        builder.Property(c => c.IdEstado)
+            .HasColumnName("id_estado"); // ← snake_case correto
 
-        // Relacionamentos N:N (apenas para navegação)
-        builder.HasMany(c => c.Contatos)
-            .WithOne(cc => cc.Cliente)
-            .HasForeignKey(cc => cc.IdCliente);
+        builder.Property(c => c.NomeCidade)
+            .HasColumnName("nome_cidade") // ← snake_case correto (NÃO "nome")
+            .IsRequired()
+            .HasMaxLength(100);
 
-        builder.HasMany(c => c.Documentos)
-            .WithOne(cd => cd.Cliente)
-            .HasForeignKey(cd => cd.IdCliente);
-
-        builder.HasMany(c => c.Eventos)
-            .WithOne(ec => ec.Cliente)
-            .HasForeignKey(ec => ec.IdCliente);
-
-        builder.HasMany(c => c.Demandas)
-            .WithOne(dc => dc.Cliente)
-            .HasForeignKey(dc => dc.IdCliente);
+        builder.HasOne(c => c.Estado)
+            .WithMany(e => e.Cidades)
+            .HasForeignKey(c => c.IdEstado);
     }
 }
