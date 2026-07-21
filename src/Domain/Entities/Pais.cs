@@ -12,7 +12,7 @@ public class Pais
 
     public string CodigoIso {get; private set;}
 
-
+    public IReadOnlyCollection<Estado> Estados => _estados.AsReadOnly();
     protected Pais(){}
 
     public Pais(string nome_pais, string codigo_iso)
