@@ -56,7 +56,7 @@ public class Fornecedor
         Ativo = false;
     }
 
-    public void Atualizar(string nome, int idCidade)
+    public void Atualizar(string nome, int? idCidade)
     {
         ValidarNome(nome);
 
