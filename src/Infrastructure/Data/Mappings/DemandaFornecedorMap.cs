@@ -15,6 +15,6 @@ public class DemandaFornecedorMap : IEntityTypeConfiguration<DemandaFornecedor>
         builder.Property(df => df.IdFornecedor).HasColumnName("id_fornecedor");
 
         builder.HasOne(df => df.Demanda).WithMany(d => d.Fornecedores).HasForeignKey(df => df.IdDemanda);
-        builder.HasOne(df => df.Fornecedor).WithMany().HasForeignKey(df => df.IdFornecedor);
+        builder.HasOne(df => df.Fornecedor).WithMany(f => f.Demandas).HasForeignKey(df => df.IdFornecedor);
     }
 }

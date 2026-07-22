@@ -15,6 +15,6 @@ public class DemandaClienteMap : IEntityTypeConfiguration<DemandaCliente>
         builder.Property(dc => dc.IdCliente).HasColumnName("id_cliente");
 
         builder.HasOne(dc => dc.Demanda).WithMany(d => d.Clientes).HasForeignKey(dc => dc.IdDemanda);
-        builder.HasOne(dc => dc.Cliente).WithMany().HasForeignKey(dc => dc.IdCliente);
+        builder.HasOne(dc => dc.Cliente).WithMany(c => c.Demandas).HasForeignKey(dc => dc.IdCliente);
     }
 }
