@@ -4,6 +4,9 @@ import { LoginForm } from '@/components/login-form'
 export default function LoginPage() {
   return (
     <main className="flex min-h-svh items-center justify-center bg-background px-4 py-10">
+      <p style={{ color: 'red', fontSize: '10px' }}>
+        DEBUG: {process.env.NEXT_PUBLIC_API_URL || 'VAZIA'}
+      </p>
       <div className="w-full max-w-md">
         <div className="rounded-xl border border-border bg-card p-8 shadow-sm sm:p-10">
           <header className="mb-8 flex flex-col items-center gap-5 text-center">
