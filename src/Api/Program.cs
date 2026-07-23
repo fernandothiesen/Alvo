@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -212,6 +212,8 @@ builder.Services.AddControllers()
     });
 
 // Cors config
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -223,9 +225,10 @@ builder.Services.AddCors(options =>
 
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://26.159.126.189:3000")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -252,7 +255,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseCors("AllowAll"); // Altere para "AllowFrontend" em produção
+app.UseCors("AllowFrontEnd"); // Altere para "AllowFrontend" em produção
 
 // Authentication && Authorization Middleware
 app.UseAuthentication();

@@ -1,48 +1,56 @@
-    const API_URL = process.env.NEXT_PUBLIC_API_URL
+import axios from 'axios';
 
-    export interface ApiResponseResult<T = unknown> {
-    Success: boolean
-    Message: string
-    Data?: T
-    }
+// Captura a URL da sua API a partir das variáveis de ambiente do projeto
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-    export class ApiError extends Error {
-    status: number
-    constructor(message: string, status: number) {
-        super(message)
-        this.status = status
-    }
-    }
+if (!API_URL) {
+    console.warn('API não configurada. Defina a variável de ambiente NEXT_PUBLIC_API_URL.');
+}
 
-    export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-    if (!API_URL) {
-        throw new Error('API n\u00E3o configurada. Defina NEXT_PUBLIC_API_URL.')
-    }
-
-    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null
-
-    const response = await fetch(`${API_URL}${path}`, {
-        ...options,
-        headers: {
+// Cria a instância principal do Axios
+export const api = axios.create({
+    baseURL: API_URL,
+    headers: {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...options.headers,
-        },
-    })
+    },
+});
 
-    if (response.status === 401) {
+// Interceptor de Requisição: Injeta o token antes de enviar para o servidor
+api.interceptors.request.use(
+    (config) => {
+        // Como o Next.js pode rodar no servidor (SSR), precisamos garantir 
+        // que o sessionStorage só seja acessado no navegador (cliente)
         if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('token')
-        window.location.href = '/'
+            const token = sessionStorage.getItem('token');
+            
+            if (token && config.headers) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
         }
-        throw new ApiError('Sess\u00E3o expirada. Fa\u00E7a login novamente.', 401)
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
+);
 
-    const result: ApiResponseResult<T> = await response.json()
 
-    if (!response.ok || !result.Success) {
-        throw new ApiError(result.Message || 'Erro ao processar solicita\u00E7\u00E3o.', response.status)
+api.interceptors.response.use(
+    (response) => {
+        
+        return response;
+    },
+    (error) => {
+    
+        if (error.response && error.response.status === 401) {
+            if (typeof window !== 'undefined') {
+                console.warn('Sessão expirada ou não autorizada. Limpando token...');
+                sessionStorage.removeItem('token');
+                
+            
+                // window.location.href = '/login'; 
+            }
+        }
+        return Promise.reject(error);
     }
-
-    return result.Data as T
-    }
+);
