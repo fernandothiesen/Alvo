@@ -162,8 +162,6 @@ public class UsuariosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Authorize]
-
     public async Task<IActionResult> AtualizarRoles(int id, [FromBody] AtualizarRoleDto dto)
     {
         _logger.LogInformation("Atualizando roles do usuario ID: {Id}", id);
@@ -194,15 +192,12 @@ public class UsuariosController : ControllerBase
 
         if(!resultado.Success)
         {
-            if(!resultado.Success)
+            if(resultado.Message.Contains("não encontrado"))
             {
-                if(resultado.Message.Contains("não encontrado"))
-                {
-                    return NotFound(resultado);
-                }
-                
-                return BadRequest(resultado);
+                return NotFound(resultado);
             }
+            
+            return BadRequest(resultado);
         }
 
         return Ok(resultado);
